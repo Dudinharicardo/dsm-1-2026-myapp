@@ -1,23 +1,28 @@
 import { ButtonFatec } from "@/components/Button";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useRouter } from "expo-router";
+import { useContext } from "react";
 import { Alert, Image, StyleSheet, Text, View } from "react-native";
-import { useRouter} from "expo-router"; 
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { AuthContext } from "../utils/authContext";
 
 export default function DashBoard() {
   const route = useRouter();
-  function logout(){
+  const auth = useContext(AuthContext);
+
+  function logout() {
+    auth.logOut();
     route.navigate("/");
   }
-  function openCadastros(){
-    console.log( "novo registro") ;
+  function openCadastros() {
+    console.log("novo registro");
     Alert.alert("sucesso ao inserir novo registro ");
   }
-  function newRegister(){
+  function newRegister() {
     route.navigate("/register");
   }
-  function deleteRegister(){
-    console.log( "apagando registro") ;
+  function deleteRegister() {
+    console.log("apagando registro");
     Alert.alert("apagando registro atual");
   }
 
@@ -34,31 +39,39 @@ export default function DashBoard() {
         <Text style={styles.inputText}>tela principal</Text>
       </View>
       <View style={styles.footer}>
-        <ButtonFatec 
+        <ButtonFatec
           text={"sair"}
-          action ={()=>{ logout()}}
+          action={() => {
+            logout();
+          }}
           icon={MaterialCommunityIcons}
-          iconName= {"exit-run"}
+          iconName={"exit-run"}
         />
-        <ButtonFatec 
+        <ButtonFatec
           text={"cadastros"}
-          action ={()=>{ openCadastros()}}
+          action={() => {
+            openCadastros();
+          }}
           icon={MaterialCommunityIcons}
-          iconName= {"exit-run"}
+          iconName={"exit-run"}
         />
-        <ButtonFatec 
+        <ButtonFatec
           text={"Novo"}
-          action ={()=>{newRegister()}}
+          action={() => {
+            newRegister();
+          }}
           icon={MaterialCommunityIcons}
-          iconName= {"exit-run"}
-          />
-          
-        <ButtonFatec 
+          iconName={"exit-run"}
+        />
+
+        <ButtonFatec
           text={"Excluir"}
-          action ={()=>{( deleteRegister())}}
+          action={() => {
+            deleteRegister();
+          }}
           icon={MaterialIcons}
-          iconName= {"arrow-back-ios-new"}
-          />
+          iconName={"arrow-back-ios-new"}
+        />
       </View>
     </View>
   );
@@ -99,7 +112,7 @@ const styles = StyleSheet.create({
     flex: 1 / 3,
     alignItems: "center",
     justifyContent: "center",
-    
+
     gap: 10,
     // backgroundColor: "lightgreen",
   },

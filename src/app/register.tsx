@@ -35,7 +35,7 @@ export default function Register() {
       );
       return;
     }
-    router.navigate("/");
+    router.navigate("/login");
   }
 
   return (
@@ -44,7 +44,7 @@ export default function Register() {
         <Image source={require("@/assets/images/favicon.png")} />
         <Text style={styles.titulo}>Register</Text>
         <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-          Aula 17/08/2026
+          Aula 31/08/2026
         </Text>
       </View>
       <View style={styles.main}>
@@ -88,7 +88,7 @@ export default function Register() {
       <View style={styles.footer}>
         <Text style={styles.inputText}>
           Já possui cadastro,{" "}
-          <Link href={"/"}>
+          <Link href={"/login"}>
             <Text style={styles.textoLink}>façao o login!</Text>{" "}
           </Link>
         </Text>

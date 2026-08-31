@@ -1,5 +1,5 @@
 import { Link, useRouter } from "expo-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Alert,
   Button,
@@ -9,15 +9,18 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { AuthContext } from "./utils/authContext";
 
-export default function Index() {
+export default function Login() {
   const router = useRouter();
   const [senha, setSenha] = useState<string>();
   const [usuario, setUsuario] = useState<string>();
+  const auth = useContext(AuthContext);
 
   function onClickAcessar() {
     if (usuario == "teste@test.com" && senha == "123") {
-      router.navigate("/dashboard");
+      auth.logIn();
+      router.navigate("/");
     } else {
       Alert.alert("Usuário ou Senha invalido ...");
     }
@@ -29,7 +32,7 @@ export default function Index() {
         <Image source={require("@/assets/images/favicon.png")} />
         <Text style={styles.titulo}>Login</Text>
         <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-          Aula 17/08/2026
+          Aula 31/08/2026
         </Text>
       </View>
       <View style={styles.main}>
