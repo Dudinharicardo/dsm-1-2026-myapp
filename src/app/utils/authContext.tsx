@@ -1,4 +1,5 @@
-import { createContext, PropsWithChildren, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
 type AuthContextProps = {
   isLoggedIn: boolean;
@@ -14,13 +15,41 @@ export const AuthContext = createContext<AuthContextProps>({
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [isLoggedIn, setILoggedIn] = useState(false);
-  const logIn = () => {
+
+  useEffect(() => {
+    const verificarLogin = async () => {
+      try {
+        // 1. Pega a string do AsyncStorage
+        const jsonValue = await AsyncStorage.getItem("my-key");
+
+        // 2. Verifica se ela existe e transforma em objeto
+        if (jsonValue !== null) {
+          const resultado = JSON.parse(jsonValue);
+
+          // 3. Atualiza o seu estado com o valor booleano (true/false)
+          setILoggedIn(resultado.isLoggedIn);
+        }
+      } catch (error) {
+        console.error("Erro ao ler o status de login:", error);
+      } finally {
+        setILoggedIn(false); // Finaliza o estado de carregamento
+      }
+    };
+
+    verificarLogin();
+  }, []);
+  const logIn = async () => {
+    const jsonValue = JSON.stringify({ isLoggedIn: true });
     setILoggedIn(true);
+    await AsyncStorage.setItem("my-key", jsonValue);
   };
 
-  const logOut = () => {
+  const logOut = async () => {
+    const jsonValue = JSON.stringify({ isLoggedIn: false });
     setILoggedIn(false);
+    await AsyncStorage.setItem("my-key", jsonValue);
   };
+
   return (
     <AuthContext value={{ isLoggedIn, logIn, logOut }}>{children}</AuthContext>
   );
