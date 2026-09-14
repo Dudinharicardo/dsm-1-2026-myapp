@@ -32,7 +32,7 @@ export default function Login() {
         <Image source={require("@/assets/images/favicon.png")} />
         <Text style={styles.titulo}>Login</Text>
         <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-          Aula 31/08/2026
+          Aula 14/09/2026
         </Text>
       </View>
       <View style={styles.main}>

@@ -25,9 +25,14 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         // 2. Verifica se ela existe e transforma em objeto
         if (jsonValue !== null) {
           const resultado = JSON.parse(jsonValue);
-
+          console.log(typeof resultado.isLoggedIn);
           // 3. Atualiza o seu estado com o valor booleano (true/false)
-          setILoggedIn(resultado.isLoggedIn);
+          if (resultado.isLoggedIn) {
+            console.log(`if  ${resultado.isLoggedIn}`);
+            setILoggedIn(true);
+          } else {
+            setILoggedIn(false);
+          }
         }
       } catch (error) {
         console.error("Erro ao ler o status de login:", error);
@@ -38,6 +43,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
     verificarLogin();
   }, []);
+
   const logIn = async () => {
     const jsonValue = JSON.stringify({ isLoggedIn: true });
     setILoggedIn(true);
