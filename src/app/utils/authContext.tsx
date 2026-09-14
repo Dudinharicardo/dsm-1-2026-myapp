@@ -1,20 +1,32 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router"
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
+interface user { id: number,
+          name: string,
+          avatar: string,
+          email: string
+  };
 type AuthContextProps = {
   isLoggedIn: boolean;
+  isReding: boolean; // false enquanto o login nao for valido
+  user: user| null,
   logIn: () => void;
   logOut: () => void;
 };
 
 export const AuthContext = createContext<AuthContextProps>({
   isLoggedIn: false,
+  isReding: false,
+  user: null,
   logIn: () => {},
   logOut: () => {},
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [isLoggedIn, setILoggedIn] = useState(false);
+  const [isReding, setReding] = useState(true);
+  const [user, setuser] = useState<user|null>(null);
 
   useEffect(() => {
     const verificarLogin = async () => {
@@ -30,6 +42,13 @@ export default function AuthProvider({ children }: PropsWithChildren) {
           if (resultado.isLoggedIn) {
             console.log(`if  ${resultado.isLoggedIn}`);
             setILoggedIn(true);
+             const userPayould:user = {
+              id:1,
+              name: "",
+              avatar: "",
+              email:""
+            };
+            setuser(userPayould)
           } else {
             setILoggedIn(false);
           }
@@ -37,7 +56,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
       } catch (error) {
         console.error("Erro ao ler o status de login:", error);
       } finally {
-        setILoggedIn(false); // Finaliza o estado de carregamento
+        setReding(false); // Finaliza o estado de carregamento
       }
     };
 
@@ -45,9 +64,10 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   const logIn = async () => {
-    const jsonValue = JSON.stringify({ isLoggedIn: true });
+    const jsonValue = JSON.stringify({ isLoggedIn: true, user});
     setILoggedIn(true);
     await AsyncStorage.setItem("my-key", jsonValue);
+
   };
 
   const logOut = async () => {
@@ -57,6 +77,6 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   };
 
   return (
-    <AuthContext value={{ isLoggedIn, logIn, logOut }}>{children}</AuthContext>
+    <AuthContext value={{ isLoggedIn, isReding, user, logIn, logOut }}>{children}</AuthContext>
   );
 }
